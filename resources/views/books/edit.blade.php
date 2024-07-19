@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', 'Edit Book')
 @section('body')
     <h1 class="text-2xl font-medium">Edit Book</h1>
     <hr>

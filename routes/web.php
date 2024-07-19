@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\HobbyController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,5 +21,7 @@ Route::get('/', function () {
 });
 
 Route::resource("authors", AuthorController::class);
+Route::get('/authors/{id}', 'AuthorController@showProfile')->name('author.profile');
 Route::resource("books", BookController::class);
+Route::resource("hobbies", HobbyController::class);
 // Route::delete('/authors/{id}', [AuthorController::class, 'destroy'])->name('authors.destroy');

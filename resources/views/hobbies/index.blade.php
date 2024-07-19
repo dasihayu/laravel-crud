@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Authors')
+@section('title', 'Hobbies')
 @section('body')
     <div class="flex item-center justify-between">
-        <h1 class="text-2xl font-medium">Authors</h1>
+        <h1 class="text-2xl font-medium">Hobbies</h1>
         <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
-            <a href="{{ route('authors.create') }}" class="button">New Author</a>
+            <a href="{{ route('hobbies.create') }}" class="button">New Hobby</a>
         </button>
     </div>
 
@@ -20,10 +20,10 @@
             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                 <tr>
                     <th scope="col" class="px-6 py-3">
-                        Name
+                        Hobby
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Email
+                        Total
                     </th>
                     <th scope="col" class="px-6 py-3">
                         Action
@@ -31,19 +31,16 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($authors as $author)    
+                @foreach ($hobbies as $hobby)
                     <tr class="odd:bg-white even:bg-gray-50 border-b">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap cursor-pointer">
-                            <a href="{{ route('author.profile', ['id' => $author->id]) }}">
-                                {{ $author->name }}
-                            </a>
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                            {{ $hobby->name }}
                         </th>
                         <td class="px-6 py-4">
-                            {{ $author->email }}
+                            {{ $hobby->authors_count }}
                         </td>
                         <td class="px-6 py-4 flex gap-2">
-                            <a href="{{ route('authors.edit', $author->id) }}" class="font-medium text-blue-600 hover:underline">Edit</a>
-                            <button onclick="deleteAuthor({{ $author->id }})" class="font-medium text-red-600 hover:underline">Delete</button>
+                            <button onclick="deleteHobby({{ $hobby->id }})" class="font-medium text-red-600 hover:underline">Delete</button>
                         </td>
                     </tr>
                 @endforeach
@@ -51,10 +48,10 @@
         </table>
     </div>
     <div class="mt-4">
-        {{ $authors->links() }}
+        {{-- {{ $hobbies->links() }} --}}
     </div>
     <script>
-        function deleteAuthor(authorId) {
+        function deleteHobby(hobbyId) {
             event.preventDefault(); // Mencegah reload halaman
             Swal.fire({
                 title: 'Are you sure?',
@@ -66,7 +63,7 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                     if (result.isConfirmed) {
-                        fetch(`/authors/${authorId}`, {
+                        fetch(`/hobbies/${hobbyId}`, {
                             method: 'DELETE',
                             headers: {
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -104,7 +101,7 @@
                     }
                 });
         }
-</script>
+    </script>
 
 
 @endsection

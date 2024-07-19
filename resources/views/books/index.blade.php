@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-
+@section('title', 'Books')
 @section('body')
     <div class="flex item-center justify-between">
         <h1 class="text-2xl font-medium">Books</h1>

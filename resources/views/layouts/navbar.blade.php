@@ -13,13 +13,13 @@
       <div class="hidden w-full md:block md:w-auto" id="navbar-solid-bg">
         <ul class="flex flex-col font-medium mt-4 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700">
           <li>
-            <a href="/" class="block py-2 px-3 text-dark class="{{ request()->routeIs('/') ? 'text-blue-400' : 'text-white' }}">Home</a>
-          </li>
-          <li>
             <a href="{{ route('authors.index') }}" class="{{ request()->routeIs('authors.*') ? 'text-blue-600' : 'text-dark' }} block py-2 px-3 text-dark">Authors</a>
           </li>
           <li>
             <a href="{{ route('books.index') }}" class="{{ request()->routeIs('books.*') ? 'text-blue-600' : 'text-dark' }} block py-2 px-3 text-dark">Books</a>
+          </li>
+          <li>
+            <a href="{{ route('hobbies.index') }}" class="{{ request()->routeIs('hobbies.*') ? 'text-blue-600' : 'text-dark' }} block py-2 px-3 text-dark">Hobbies</a>
           </li>
         </ul>
       </div>

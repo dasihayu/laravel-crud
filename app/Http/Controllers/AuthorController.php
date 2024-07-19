@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AuthorRequest;
 use App\Http\Requests\UpdateAuthorRequest;
 use App\Models\Author;
+use App\Models\AuthorProfile;
+use App\Models\Hobby;
 use Illuminate\Http\Request;
 
 class AuthorController extends Controller
@@ -14,6 +16,7 @@ class AuthorController extends Controller
      */
     public function index()
     {
+        $page = request()->query('page', 1);
         $authors = Author::simplePaginate(10);
         return view('authors.index', compact('authors'));
     }
@@ -24,7 +27,8 @@ class AuthorController extends Controller
     public function create()
     {
         $authors = Author::all();
-        return view('authors.create');
+        $hobbies = Hobby::all();
+        return view('authors.create', compact('hobbies', 'authors'));
     }
 
     /**
@@ -32,35 +36,74 @@ class AuthorController extends Controller
      */
     public function store(AuthorRequest $request)
     {
-        $author = new Author();
-        $author->name = $request->get('name');
-        $author->email = $request->get('email');
+        $validated = $request->validated();
+
+        // Buat author baru
+        $author = Author::create($request->only(['name', 'email']));
+    
+        // Buat profile author baru
+        $profileData = $request->only(['bio', 'office', 'age']);
+        $profileData['author_id'] = $author->id;
+        AuthorProfile::create($profileData);
+    
+        // Tambahkan hobi ke author
+        if ($request->has('hobbies')) {
+            $author->hobbies()->attach($request->input('hobbies'));
+        }
+    
+        // Simpan author (sebenarnya tidak perlu jika sudah menggunakan create)
         $author->save();
+    
         return redirect()->route('authors.index');
+    
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Author $author)
+    public function show($id)
     {
-        return view('authors.show', compact('author'));
+        $author = Author::findOrFail($id);
+
+        // Mengambil profile author
+        $profile = $author->profile;
+
+        return view('authors.profile', compact('author', 'profile'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Author $author)
+    public function edit($id)
     {
-        return view('authors.edit', compact('author'));
+        $author = Author::with('profile','hobbies')->findOrFail($id);
+        $hobbies = Hobby::all(); 
+        return view('authors.edit', compact('author', 'hobbies'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAuthorRequest $request, Author $author)
+    public function update(UpdateAuthorRequest $request, $id)
     {
-        $author->update($request->all());
+        $author = Author::findOrFail($id);
+        $author->name = $request->input('name');
+        $author->email = $request->input('email');
+        $profileData = [
+            'office' => $request->input('office'),
+            'age' => $request->input('age'),
+            'bio' => $request->input('bio'),
+        ];
+    
+        $author->profile()->updateOrCreate(
+            ['author_id' => $author->id],
+            $profileData
+        );
+    
+        // Update hobbies
+        $author->hobbies()->sync($request->input('hobbies', []));
+
+    
         return redirect()->route('authors.index');
     }
 
@@ -75,4 +118,10 @@ class AuthorController extends Controller
         return response()->json(['success' => true]);
 
     }
+
+    public function showProfile($id)
+{
+    $author = Author::findOrFail($id);
+    return view('authors.profile', compact('author'));
+}
 }

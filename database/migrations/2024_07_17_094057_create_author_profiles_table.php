@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('books', function (Blueprint $table) {
+        Schema::create('author_profiles', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->integer('serial_number')->unique();
-            $table->timestamp('published_at')->useCurrent();
-            $table->unsignedBigInteger('author_id');
-            $table->foreign('author_id')->references('id')->on('authors')->onDelete('cascade');
+            $table->foreignId('author_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('age');
+            $table->string('office');
+            $table->string('bio')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('books');
+        Schema::dropIfExists('author_profiles');
     }
 };

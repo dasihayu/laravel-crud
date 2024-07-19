@@ -18,4 +18,14 @@ class Author extends Model
     {
         return $this->hasMany(Book::class);
     }
+
+    public function profile()
+    {
+        return $this->hasOne(AuthorProfile::class);
+    }
+
+    public function hobbies()
+    {
+        return $this->belongsToMany(Hobby::class, 'author_hobby');
+    }
 }
