@@ -17,7 +17,9 @@ class AuthorProfileFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'age' => $this->faker->numberBetween(20, 60),
+            'office' => "Office " . $this->faker->numberBetween(1, 10),
+            'bio' => $this->faker->text(50),
         ];
     }
 }

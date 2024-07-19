@@ -14,10 +14,16 @@ class AuthorController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+
+        $search = $request->query('search');
+        if ($search) {
+            $authors = Author::where('name', 'LIKE', "%{$search}%")->paginate(10);
+        } else {
+            $authors = Author::simplePaginate(10);
+        }
         $page = request()->query('page', 1);
-        $authors = Author::simplePaginate(10);
         return view('authors.index', compact('authors'));
     }
 

@@ -16,9 +16,19 @@ class AuthorFactory extends Factory
      */
     public function definition(): array
     {
+        $faker = \Faker\Factory::create('id_ID'); // Menggunakan lokal Indonesia
+
+        // Daftar nama depan yang mirip
+        $firstNames = ['Agus', 'Budi', 'Joko', 'Siti', 'Ani', 'Rina', 'Wawan', 'Dedi', 'Lila', 'Yudi'];
+        $lastNames = ['Susanto', 'Sutoyo', 'Suryadi', 'Prabowo', 'Hadi', 'Setiawan', 'Jaya', 'Rahmat', 'Putra', 'Nugroho'];
+
+        // Mengambil nama depan dan nama belakang secara acak
+        $firstName = $faker->randomElement($firstNames);
+        $lastName = $faker->randomElement($lastNames);
+
         return [
-            'name' => $this->faker->name,
-            'email' => $this->faker->unique()->safeEmail,   
+            'name' => "$firstName $lastName",
+            'email' => $faker->unique()->safeEmail,
         ];
     }
 }
