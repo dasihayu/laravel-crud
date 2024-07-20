@@ -46,7 +46,7 @@
                         <path fill-rule="evenodd" d="M12 4a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2 9a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-1a4 4 0 0 0-4-4h-4Z" clip-rule="evenodd"/>
                     </svg>
                 </div>
-                <select id="authors" name="author_id" value="{{ old('author') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5" placeholder="Joko">
+                <select id="authors" name="author_id" value="{{ old('author') }}" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 selectdua" placeholder="Joko">
                     <option value="">Select an author</option>
                     @foreach($authors as $author)
                         <option value="{{ $author->id }}" {{ old('author_id') == $author->id ? 'selected' : '' }}>{{ $author->name }}</option>
@@ -81,5 +81,10 @@
                 </div>
             </div>
         @endif
+        <script>
+            $(document).ready(function() {
+                $('.selectdua').select2();
+            });
+        </script>
 
 @endsection
