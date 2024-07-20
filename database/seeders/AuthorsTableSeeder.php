@@ -25,7 +25,7 @@ class AuthorsTableSeeder extends Seeder
             $author->profile()->save($authorProfile);
 
             // Mengambil hobi acak minimal 3 dengan ID 2-11
-            $hobbies = Hobby::whereBetween('id', [1, 10])->inRandomOrder()->take(3)->pluck('id');
+            $hobbies = Hobby::whereBetween('id', [1, 15])->inRandomOrder()->take(3)->pluck('id');
             $author->hobbies()->attach($hobbies);
         });
 

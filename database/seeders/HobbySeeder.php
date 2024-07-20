@@ -13,6 +13,6 @@ class HobbySeeder extends Seeder
      */
     public function run(): void
     {
-        Hobby::factory()->count(10)->create();
+        Hobby::factory()->count(15)->create();
     }
 }

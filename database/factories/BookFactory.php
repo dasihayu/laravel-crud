@@ -24,6 +24,7 @@ class BookFactory extends Factory
             'title' => $this->faker->sentence,
             'author_id' => $authorId,
             'serial_number' => $this->faker->generateUniqueSerialNumber(),
+            'published_at' => $this->faker->date()
         ];
     }
 

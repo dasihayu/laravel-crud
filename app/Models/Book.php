@@ -13,6 +13,7 @@ class Book extends Model
         'title',
         'serial_number',
         'author_id',
+        'published_at',
     ];
 
     public function author()

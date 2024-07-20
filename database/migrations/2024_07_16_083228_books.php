@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->integer('serial_number')->unique();
-            $table->timestamp('published_at')->useCurrent();
+            $table->date('published_at')->nullable();
             $table->unsignedBigInteger('author_id');
             $table->foreign('author_id')->references('id')->on('authors')->onDelete('cascade');
             $table->timestamps();

@@ -6,16 +6,31 @@ use App\Http\Requests\BookRequest;
 use App\Http\Requests\UpdateBookRequest;
 use App\Models\Author;
 use App\Models\Book;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class BookController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $books = Book::simplePaginate(10);
+        $query = Book::query();
+
+        if ($request->has('search')) {
+            $searchTerm = $request->search;
+            $query->where(function ($query) use ($searchTerm) {
+                $query->where('title', 'LIKE', "%{$searchTerm}%")
+                        ->orWhere('serial_number', 'LIKE', "%{$searchTerm}%")
+                        ->orWhereHas('author', function ($query) use ($searchTerm) {
+                            $query->where('name', 'LIKE', "%{$searchTerm}%");
+                    });
+            });
+        }
+
+        $books = $query->simplePaginate(10);
         return view('books.index', compact('books'));
     }
 
@@ -33,11 +48,25 @@ class BookController extends Controller
      */
     public function store(BookRequest $request)
     {
-        $books = new Book();
-        $books->title = $request->get('title');
-        $books->serial_number = $request->get('serial_number');
-        $books->author_id = $request->get('author_id');
-        $books->save();
+        $validatedData = $request->validated();
+    
+        // dd($validatedData);
+        try {
+            $publishedAt = Carbon::createFromFormat('Y-m-d', $validatedData['published_at']);
+            $formattedDate = $publishedAt->format('Y-m-d');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['published_at' => 'Invalid date format']);
+        }
+
+        
+
+        $book = new Book();
+        $book->title = $validatedData['title'];
+        $book->serial_number = $validatedData['serial_number'];
+        $book->author_id = $validatedData['author_id'];
+        $book->published_at = $formattedDate; // Gunakan data yang tervalidasi
+        $book->save();
+        
         return redirect()->route('books.index');
     }
 

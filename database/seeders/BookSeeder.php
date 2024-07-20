@@ -6,6 +6,7 @@ use App\Models\Author;
 use App\Models\Book;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Faker\Factory as Faker;
 
 class BookSeeder extends Seeder
 {
@@ -16,17 +17,22 @@ class BookSeeder extends Seeder
     {
         $authors = Author::all();
         $bookCount = 50;
+        $faker = Faker::create(); // Buat instance Faker
 
         // Buat buku
         for ($i = 0; $i < $bookCount; $i++) {
             // Pilih author secara acak
             $author = $authors->random();
 
+            // Generate a random date before today
+            $randomDate = $faker->dateTimeBetween('-2 years', 'now')->format('Y-m-d');
+
             // Buat buku
             Book::create([
                 'title' => 'Book Title ' . ($i + 1),
                 'serial_number' => $this->generateUniqueSerialNumber(),
                 'author_id' => $author->id,
+                'published_at' => $randomDate,
             ]);
         }
     }

@@ -25,6 +25,7 @@ class BookRequest extends FormRequest
             "title" => "required|min:3|max:255",
             "serial_number" => "required|min:3|max:255",
             "author_id" => "required",
+            "published_at" => "required|date_format:Y-m-d",
         ];
     }
 }
